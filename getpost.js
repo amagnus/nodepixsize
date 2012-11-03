@@ -23,10 +23,6 @@ http.createServer(function (req, res) {
 	console.log(url_parts);
     }
 
-    console.log(url_parts['w']);
-    console.log(url_parts['h']); 
-    console.log(url_parts['u']);
-
     var request = http.get(url_parts['u'], function(res){
     	var imagedata = ''
     	res.setEncoding('binary')
@@ -44,10 +40,17 @@ http.createServer(function (req, res) {
         		        if (err) throw err;
         			    console.log('Resized');
     			    });
-
         	})
     	})
     })
+
+
+    stats = fs.lstatSync('logo-small.png');
+    if(stats.isFile()) {
+        var img = fs.readFileSync('./logo-small.png');
+        res.writeHead(200, {'Content-Type': 'image/png' });
+        res.end(img, 'binary');
+    }
 
 
 }).listen(3000, "127.0.0.1");
