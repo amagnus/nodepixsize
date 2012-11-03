@@ -35,18 +35,23 @@ http.createServer(function (req, res) {
         	fs.writeFile('logo.png', imagedata, 'binary', function(err){
             		if (err) throw err
             		    console.log('File saved.')
+			
+			easyimg.resize({src:'logo.png', dst:'logo-small.png', width:url_parts['w'], height:url_parts['h']}, function(err, stdout, stderr) {
+                            if (err) throw err;
+                                console.log('Resized');
+                            });
 
-			    easyimg.resize({src:'logo.png', dst:'logo-small.png', width:url_parts['w'], height:url_parts['h']}, function(err, stdout, stderr) {
-        		        if (err) throw err;
-        			    console.log('Resized');
-
-				var img = fs.readFileSync('./logo-small.png');
-			        res.writeHead(200, {'Content-Type': 'image/png' });
-     				res.end(img, 'binary');	
-    			    });
         	})
+
     	})
     })
+
+
+setTimeout(function() {
+    var img = fs.readFileSync('./logo-small.png');
+    res.writeHead(200, {'Content-Type': 'image/png' });
+    res.end(img, 'binary');
+}, 3000)
 
 
 }).listen(3000, "127.0.0.1");
