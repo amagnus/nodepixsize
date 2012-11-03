@@ -1,8 +1,8 @@
 
 /*
- * GET home page.
+ * GET key page.
  */
 
-exports.index = function(req, res){
+exports.key = function(req, res){
   res.render('index', { title: 'Express' });
 };
