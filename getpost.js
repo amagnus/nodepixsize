@@ -42,19 +42,24 @@ http.createServer(function (req, res) {
 			easyimg.resize({src:'logo.png', dst:'logo-small.png', width:url_parts['w'], height:url_parts['h']}, function(err, stdout, stderr) {
                             if (err) throw err;
                                 console.log('Resized');
-                            });
+                        });
+
+			// As we save more and more images to the disk we'll get storage problems
+			// We might put these images into cache
         	})
     	})
     })
 
-// Return resized image
+// Return resized image, with big timeout for large images
+// A better way to do this is to implement async module to control execution order
 setTimeout(function() {
-    var img = fs.readFileSync('./logo-small.png', function (err) {
-        if (err) throw err;
-        console.log('hello');
-    });
+    var img = fs.readFileSync('./logo-small.png');
     res.writeHead(200, {'Content-Type': 'image/png' });
     res.end(img, 'binary');
-}, 6000)
+}, 10000)
+
+// Implementing a caching system is appropriate to return images already requested before.
+// We need to implement a queueing system to handle simultaneous requests.
+
 
 }).listen(3000, "127.0.0.1");
