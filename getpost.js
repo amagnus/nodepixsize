@@ -2,6 +2,7 @@ var sys = require ('sys'),
 url = require('url'),
 http = require('http'),
 qs = require('querystring');
+var easyimg = require('easyimage');
 
 http.createServer(function (req, res) {
    
@@ -13,13 +14,17 @@ http.createServer(function (req, res) {
             req.on('end',function(){
                 
                 var POST =  qs.parse(body);
-                console.log(POST);
+		console.log(POST);
             });
     }
     else if(req.method=='GET') {
         var url_parts = url.parse(req.url,true);
-        console.log(url_parts.query);
+	console.log(url_parts.query);
     }
     
-    
+    easyimg.resize({src:'beach.jpg', dst:'beach-small.jpg', width:640, height:480}, function(err, stdout, stderr) {
+    	if (err) throw err;
+    	console.log('Resized to 640x480');
+    });
+
 }).listen(3000, "127.0.0.1");
