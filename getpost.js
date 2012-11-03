@@ -6,7 +6,8 @@ qs = require('querystring');
 var easyimg = require('easyimage');
 
 http.createServer(function (req, res) {
-  
+
+    // Retrieve parameters from URL
     if(req.method=='POST') {
             var body='';
             req.on('data', function (data) {
@@ -23,6 +24,7 @@ http.createServer(function (req, res) {
 	console.log(url_parts);
     }
 
+    // Write picture from specified URL on the disk
     var request = http.get(url_parts['u'], function(res){
     	var imagedata = ''
     	res.setEncoding('binary')
@@ -36,22 +38,23 @@ http.createServer(function (req, res) {
             		if (err) throw err
             		    console.log('File saved.')
 			
+			// Resize picture to requested dimensions and save it
 			easyimg.resize({src:'logo.png', dst:'logo-small.png', width:url_parts['w'], height:url_parts['h']}, function(err, stdout, stderr) {
                             if (err) throw err;
                                 console.log('Resized');
                             });
-
         	})
-
     	})
     })
 
-
+// Return resized image
 setTimeout(function() {
-    var img = fs.readFileSync('./logo-small.png');
+    var img = fs.readFileSync('./logo-small.png', function (err) {
+        if (err) throw err;
+        console.log('hello');
+    });
     res.writeHead(200, {'Content-Type': 'image/png' });
     res.end(img, 'binary');
-}, 3000)
-
+}, 6000)
 
 }).listen(3000, "127.0.0.1");
