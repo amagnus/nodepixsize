@@ -23,8 +23,16 @@ http.createServer(function (req, res) {
 	console.log(url_parts);
     }
 
-console.log(url_parts['w']);
-console.log(url_parts['h']);  
+    console.log(url_parts['w']);
+    console.log(url_parts['h']); 
+    console.log(url_parts['u']);
+
+    var saved = http.get(("http://www.slax.org/modules/screenshots/3/3469_big.png", function(res) {
+    	console.log("Got response: " + res.statusCode);
+    }).on('error', function(e) {
+    	console.log("Got error: " + e.message);	
+    });
+
  
     easyimg.resize({src:'beach.jpg', dst:'beach-small.jpg', width:640, height:480}, function(err, stdout, stderr) {
     	if (err) throw err;
