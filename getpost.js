@@ -5,7 +5,8 @@ qs = require('querystring');
 var easyimg = require('easyimage');
 
 http.createServer(function (req, res) {
-   
+  
+ 
     if(req.method=='POST') {
             var body='';
             req.on('data', function (data) {
@@ -21,6 +22,8 @@ http.createServer(function (req, res) {
         var url_parts = url.parse(req.url,true);
 	console.log(url_parts.query);
     }
+
+console.log(url_parts.query[1]);
     
     easyimg.resize({src:'beach.jpg', dst:'beach-small.jpg', width:640, height:480}, function(err, stdout, stderr) {
     	if (err) throw err;
