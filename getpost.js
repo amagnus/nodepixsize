@@ -39,18 +39,14 @@ http.createServer(function (req, res) {
 			    easyimg.resize({src:'logo.png', dst:'logo-small.png', width:url_parts['w'], height:url_parts['h']}, function(err, stdout, stderr) {
         		        if (err) throw err;
         			    console.log('Resized');
+
+				var img = fs.readFileSync('./logo-small.png');
+			        res.writeHead(200, {'Content-Type': 'image/png' });
+     				res.end(img, 'binary');	
     			    });
         	})
     	})
     })
-
-
-    stats = fs.lstatSync('logo-small.png');
-    if(stats.isFile()) {
-        var img = fs.readFileSync('./logo-small.png');
-        res.writeHead(200, {'Content-Type': 'image/png' });
-        res.end(img, 'binary');
-    }
 
 
 }).listen(3000, "127.0.0.1");
