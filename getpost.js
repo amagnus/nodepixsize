@@ -19,15 +19,16 @@ http.createServer(function (req, res) {
             });
     }
     else if(req.method=='GET') {
-        var url_parts = url.parse(req.url,true);
-	console.log(url_parts.query);
+        var url_parts = url.parse(req.url,true).query;
+	console.log(url_parts);
     }
 
-console.log(url_parts.query[1]);
-    
+console.log(url_parts['w']);
+console.log(url_parts['h']);  
+ 
     easyimg.resize({src:'beach.jpg', dst:'beach-small.jpg', width:640, height:480}, function(err, stdout, stderr) {
     	if (err) throw err;
-    	console.log('Resized to 640x480');
+    	console.log('Resized');
     });
 
 }).listen(3000, "127.0.0.1");
