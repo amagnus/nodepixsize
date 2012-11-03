@@ -1,12 +1,12 @@
 var sys = require ('sys'),
 url = require('url'),
 http = require('http'),
+fs = require('fs'),
 qs = require('querystring');
 var easyimg = require('easyimage');
 
 http.createServer(function (req, res) {
   
- 
     if(req.method=='POST') {
             var body='';
             req.on('data', function (data) {
@@ -27,14 +27,27 @@ http.createServer(function (req, res) {
     console.log(url_parts['h']); 
     console.log(url_parts['u']);
 
-    var saved = http.get(("http://www.slax.org/modules/screenshots/3/3469_big.png", function(res) {
-    	console.log("Got response: " + res.statusCode);
-    }).on('error', function(e) {
-    	console.log("Got error: " + e.message);	
-    });
+    var request = http.get(url_parts['u'], function(res){
+    	var imagedata = ''
+    	res.setEncoding('binary')
 
+    	res.on('data', function(chunk){
+            imagedata += chunk
+   	})
+
+    	res.on('end', function(){
+        	fs.writeFile('logo.png', imagedata, 'binary', function(err){
+            		if (err) throw err
+            		    console.log('File saved.')
+        	})
+    	})
+    })
+
+    setTimeout(function() {
+        console.log("hello");
+    }, 2000)
  
-    easyimg.resize({src:'beach.jpg', dst:'beach-small.jpg', width:640, height:480}, function(err, stdout, stderr) {
+    easyimg.resize({src:'logo.png', dst:'logo-small.png', width:url_parts['w'], height:url_parts['h']}, function(err, stdout, stderr) {
     	if (err) throw err;
     	console.log('Resized');
     });
